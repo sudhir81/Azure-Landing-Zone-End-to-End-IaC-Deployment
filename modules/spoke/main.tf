@@ -1,4 +1,3 @@
-
 resource "azurerm_resource_group" "spoke_rg" {
   name     = "rg-${var.project}-spoke"
   location = var.location
@@ -94,8 +93,6 @@ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
   virtual_network_name      = azurerm_virtual_network.spoke_vnet.name
   remote_virtual_network_id = var.hub_vnet_id
   allow_forwarded_traffic   = true
-  allow_gateway_transit     = false
-  use_remote_gateways       = false
 }
 
 resource "azurerm_virtual_network_peering" "hub_to_spoke" {
@@ -104,8 +101,6 @@ resource "azurerm_virtual_network_peering" "hub_to_spoke" {
   virtual_network_name      = var.hub_vnet_name
   remote_virtual_network_id = azurerm_virtual_network.spoke_vnet.id
   allow_forwarded_traffic   = true
-  allow_gateway_transit     = false
-  use_remote_gateways       = false
 }
 
 output "rg_name"   { value = azurerm_resource_group.spoke_rg.name }

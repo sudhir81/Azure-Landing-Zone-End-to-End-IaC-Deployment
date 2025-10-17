@@ -1,8 +1,4 @@
 
-<p align="center">
-  <img src="assets/WorkInProgress.png" alt="Work in Progress" width="420"/>
-</p>
-
 # 🚀 Azure Landing Zone – End-to-End IaC Deployment (WIP)
 
 This repository provisions a **Minimum Viable Landing Zone (MVLZ)** on Azure using **Terraform**, then layers **governance (Policy)** and **access control (RBAC)**.
@@ -12,17 +8,17 @@ This repository provisions a **Minimum Viable Landing Zone (MVLZ)** on Azure usi
 - 🔥 **Azure Firewall** in Hub + default route from Spoke
 - 🧱 **NSGs** and **UDRs**
 - 📊 **Log Analytics Workspace** (centralized diagnostics)
-- 🛡️ **Azure Policy** (tag enforcement, deny public IPs, audit diagnostics)
+- 🛡️ **Azure Policy** (tag enforcement, deny public IP on NICs, audit diagnostics)
 - 👥 **RBAC** on Hub/Spoke resource groups
 
-## 📦 Remote State
-Remote state is stored in **Azure Storage**:
-- Resource Group: `rg-landingzone-tfstate`
-- Storage Account: `stlztf2131`
-- Container: `tfstate`
-- Key: `landingzone/terraform.tfstate`
-
-Configure the backend via:
+## 📦 Remote State (Azure Storage)
+```
+resource_group_name  = "rg-landingzone-tfstate"
+storage_account_name = "stlztf2131"
+container_name       = "tfstate"
+key                  = "landingzone/terraform.tfstate"
+```
+Configure backend at init:
 ```bash
 terraform init -backend-config=backend.hcl
 ```
@@ -38,27 +34,15 @@ terraform plan -out plan.tfplan
 terraform apply plan.tfplan
 ```
 
-## 🏗️ Structure
+## 🧰 CI/CD
+GitHub Actions workflow runs `fmt`, `validate`, and `plan` on PRs and pushes to `main`. Add `AZURE_CREDENTIALS` repository secret (Service Principal JSON).
+
+## 🗺️ Structure
 ```
 modules/
-  hub/      -> Hub VNet, Firewall, diag
+  hub/      -> Hub VNet, Firewall, diagnostics
   spoke/    -> Spoke VNet, peering, NSGs, UDRs
   monitor/  -> Log Analytics workspace
-  policy/   -> Azure Policy definitions & assignments
-  rbac/     -> Role assignments for groups/users
+  policy/   -> Policy assignments
+  rbac/     -> Role assignments
 ```
-
-## 🧰 CI/CD (GitHub Actions)
-- PR: `fmt`, `validate`, and `plan`
-- Main: Manual approval before `apply`
-
-> Ensure you add a secret **AZURE_CREDENTIALS** (JSON for a Service Principal with Contributor) or switch to OIDC.
-
-## 🗺️ Architecture
-<p align="center">
-  <img src="assets/ArchitectureDiagram.png" alt="Architecture" width="720"/>
-</p>
-
----
-
-**Status:** Work in progress. Enhancements coming: multiple spokes, Bastion, Private DNS, and diagnostics via DCR/DCE.

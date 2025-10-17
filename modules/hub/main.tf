@@ -1,4 +1,3 @@
-
 resource "azurerm_resource_group" "hub_rg" {
   name     = "rg-${var.project}-hub"
   location = var.location
@@ -58,10 +57,22 @@ resource "azurerm_monitor_diagnostic_setting" "afw_diag" {
   target_resource_id         = azurerm_firewall.afw.id
   log_analytics_workspace_id = var.la_id
 
-  enabled_log { category = "AzureFirewallApplicationRule" }
-  enabled_log { category = "AzureFirewallNetworkRule" }
-  enabled_log { category = "AzureFirewallDnsProxy" }
-  metric { category = "AllMetrics" enabled = true }
+  enabled_log {
+    category = "AzureFirewallApplicationRule"
+  }
+
+  enabled_log {
+    category = "AzureFirewallNetworkRule"
+  }
+
+  enabled_log {
+    category = "AzureFirewallDnsProxy"
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled  = true
+  }
 }
 
 output "rg_name"             { value = azurerm_resource_group.hub_rg.name }
