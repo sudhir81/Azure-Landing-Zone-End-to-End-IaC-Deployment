@@ -1,1 +1,0 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"hub","Source":"./modules/hub","Dir":"modules/hub"},{"Key":"monitor","Source":"./modules/monitor","Dir":"modules/monitor"},{"Key":"policy","Source":"./modules/policy","Dir":"modules/policy"},{"Key":"rbac","Source":"./modules/rbac","Dir":"modules/rbac"},{"Key":"spoke_prod","Source":"./modules/spoke","Dir":"modules/spoke"}]}

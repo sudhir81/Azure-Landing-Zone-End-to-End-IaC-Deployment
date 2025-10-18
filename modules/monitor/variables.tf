@@ -1,2 +1,8 @@
-variable "project" { type = string }
-variable "location" { type = string, default = "eastus" }
+variable "project" {
+  type = string
+}
+
+variable "location" {
+  type    = string
+  default = "eastus"
+}

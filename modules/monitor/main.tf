@@ -11,5 +11,5 @@ resource "azurerm_log_analytics_workspace" "la" {
   retention_in_days   = 30
 }
 
-output "la_id"   { value = azurerm_log_analytics_workspace.la.id }
+output "la_id" { value = azurerm_log_analytics_workspace.la.id }
 output "rg_name" { value = azurerm_resource_group.rg.name }

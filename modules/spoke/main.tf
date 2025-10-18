@@ -103,5 +103,5 @@ resource "azurerm_virtual_network_peering" "hub_to_spoke" {
   allow_forwarded_traffic   = true
 }
 
-output "rg_name"   { value = azurerm_resource_group.spoke_rg.name }
+output "rg_name" { value = azurerm_resource_group.spoke_rg.name }
 output "vnet_name" { value = azurerm_virtual_network.spoke_vnet.name }
