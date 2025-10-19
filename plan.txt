@@ -1,0 +1,392 @@
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  - destroy
+-/+ destroy and then create replacement
+
+Terraform will perform the following actions:
+
+  # module.hub.azurerm_firewall.afw will be created
+  + resource "azurerm_firewall" "afw" {
+      + dns_proxy_enabled   = (known after apply)
+      + id                  = (known after apply)
+      + location            = "eastus"
+      + name                = "afw-lz"
+      + resource_group_name = "rg-lz-hub"
+      + sku_name            = "AZFW_VNet"
+      + sku_tier            = "Standard"
+      + threat_intel_mode   = (known after apply)
+
+      + ip_configuration {
+          + name                 = "configuration"
+          + private_ip_address   = (known after apply)
+          + public_ip_address_id = (known after apply)
+          + subnet_id            = (known after apply)
+        }
+    }
+
+  # module.hub.azurerm_monitor_diagnostic_setting.afw_diag will be created
+  + resource "azurerm_monitor_diagnostic_setting" "afw_diag" {
+      + id                             = (known after apply)
+      + log_analytics_destination_type = (known after apply)
+      + log_analytics_workspace_id     = (known after apply)
+      + name                           = "diag-afw"
+      + target_resource_id             = (known after apply)
+
+      + enabled_log {
+          + category       = "AzureFirewallApplicationRule"
+            # (1 unchanged attribute hidden)
+        }
+      + enabled_log {
+          + category       = "AzureFirewallDnsProxy"
+            # (1 unchanged attribute hidden)
+        }
+      + enabled_log {
+          + category       = "AzureFirewallNetworkRule"
+            # (1 unchanged attribute hidden)
+        }
+
+      + enabled_metric (known after apply)
+
+      + metric {
+          + category = "AllMetrics"
+          + enabled  = true
+        }
+    }
+
+  # module.hub.azurerm_public_ip.fw_pip must be replaced
+-/+ resource "azurerm_public_ip" "fw_pip" {
+      + fqdn                    = (known after apply)
+      ~ id                      = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-hub/providers/Microsoft.Network/publicIPAddresses/pip-lz-prod-afw" -> (known after apply)
+      ~ ip_address              = "172.202.23.65" -> (known after apply)
+      - ip_tags                 = {} -> null
+      ~ location                = "centralus" -> "eastus" # forces replacement
+      ~ name                    = "pip-lz-prod-afw" -> "pip-lz-afw" # forces replacement
+      ~ resource_group_name     = "rg-lz-prod-hub" -> "rg-lz-hub" # forces replacement
+      - tags                    = {} -> null
+      - zones                   = [] -> null
+        # (7 unchanged attributes hidden)
+    }
+
+  # module.hub.azurerm_resource_group.hub_rg must be replaced
+-/+ resource "azurerm_resource_group" "hub_rg" {
+      ~ id         = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-hub" -> (known after apply)
+      ~ location   = "centralus" -> "eastus" # forces replacement
+      ~ name       = "rg-lz-prod-hub" -> "rg-lz-hub" # forces replacement
+      - tags       = {} -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.hub.azurerm_route_table.rt_to_fw will be created
+  + resource "azurerm_route_table" "rt_to_fw" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "eastus"
+      + name                          = "rt-lz-to-fw"
+      + resource_group_name           = "rg-lz-hub"
+      + route                         = [
+          + {
+              + address_prefix         = "0.0.0.0/0"
+              + name                   = "default-to-fw"
+              + next_hop_in_ip_address = (known after apply)
+              + next_hop_type          = "VirtualAppliance"
+            },
+        ]
+      + subnets                       = (known after apply)
+    }
+
+  # module.hub.azurerm_subnet.firewall will be created
+  + resource "azurerm_subnet" "firewall" {
+      + address_prefixes                              = [
+          + "10.0.1.0/26",
+        ]
+      + default_outbound_access_enabled               = true
+      + id                                            = (known after apply)
+      + name                                          = "AzureFirewallSubnet"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-lz-hub"
+      + virtual_network_name                          = "vnet-lz-hub"
+    }
+
+  # module.hub.azurerm_virtual_network.hub_vnet must be replaced
+-/+ resource "azurerm_virtual_network" "hub_vnet" {
+      ~ address_space                  = [
+          - "10.2.0.0/16",
+          + "10.0.0.0/16",
+        ]
+      ~ dns_servers                    = [] -> (known after apply)
+      - flow_timeout_in_minutes        = 0 -> null
+      ~ guid                           = "9efbfaef-d819-407b-b41d-eef32ce461e2" -> (known after apply)
+      ~ id                             = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-hub/providers/Microsoft.Network/virtualNetworks/vnet-lz-prod-hub" -> (known after apply)
+      ~ location                       = "centralus" -> "eastus" # forces replacement
+      ~ name                           = "vnet-lz-prod-hub" -> "vnet-lz-hub" # forces replacement
+      ~ resource_group_name            = "rg-lz-prod-hub" -> "rg-lz-hub" # forces replacement
+      ~ subnet                         = [] -> (known after apply)
+      - tags                           = {} -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # module.monitor.azurerm_log_analytics_workspace.la must be replaced
+-/+ resource "azurerm_log_analytics_workspace" "la" {
+      - cmk_for_query_forced                    = false -> null
+      ~ id                                      = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-monitor/providers/Microsoft.OperationalInsights/workspaces/law-lz-prod" -> (known after apply)
+      - immediate_data_purge_on_30_days_enabled = false -> null
+      ~ local_authentication_disabled           = false -> (known after apply)
+      ~ local_authentication_enabled            = true -> (known after apply)
+      ~ location                                = "centralus" -> "eastus" # forces replacement
+      ~ name                                    = "law-lz-prod" -> "law-lz" # forces replacement
+      ~ primary_shared_key                      = (sensitive value)
+      ~ resource_group_name                     = "rg-lz-prod-monitor" -> "rg-lz-monitor" # forces replacement
+      ~ secondary_shared_key                    = (sensitive value)
+      - tags                                    = {} -> null
+      ~ workspace_id                            = "fca768c2-f1b4-408e-9c2f-59fc50844939" -> (known after apply)
+        # (7 unchanged attributes hidden)
+    }
+
+  # module.monitor.azurerm_resource_group.rg must be replaced
+-/+ resource "azurerm_resource_group" "rg" {
+      ~ id         = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-monitor" -> (known after apply)
+      ~ location   = "centralus" -> "eastus" # forces replacement
+      ~ name       = "rg-lz-prod-monitor" -> "rg-lz-monitor" # forces replacement
+      - tags       = {} -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.policy.azurerm_subscription_policy_assignment.audit_diag will be destroyed
+  # (because azurerm_subscription_policy_assignment.audit_diag is not in configuration)
+  - resource "azurerm_subscription_policy_assignment" "audit_diag" {
+      - description          = "Audits diagnostic settings for specific Azure resource types." -> null
+      - display_name         = "Audit diagnostic settings for selected resource types" -> null
+      - enforce              = true -> null
+      - id                   = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/providers/Microsoft.Authorization/policyAssignments/audit-diagnostics" -> null
+      - location             = "centralus" -> null
+      - metadata             = jsonencode(
+            {
+              - assignedBy = "Terraform"
+              - createdBy  = "b50e2e02-561e-40d0-af1a-fb9f1deca7bf"
+              - createdOn  = "2025-10-17T11:04:05.8373161Z"
+              - updatedBy  = null
+              - updatedOn  = null
+            }
+        ) -> null
+      - name                 = "audit-diagnostics" -> null
+      - not_scopes           = [] -> null
+      - parameters           = jsonencode(
+            {
+              - listOfResourceTypes = {
+                  - value = [
+                      - "Microsoft.Compute/virtualMachines",
+                      - "Microsoft.Network/networkSecurityGroups",
+                      - "Microsoft.Storage/storageAccounts",
+                    ]
+                }
+            }
+        ) -> null
+      - policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/7f89b1eb-583c-429a-8828-af049802c1d9" -> null
+      - subscription_id      = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413" -> null
+    }
+
+  # module.policy.azurerm_subscription_policy_assignment.deny_public_ip will be destroyed
+  # (because azurerm_subscription_policy_assignment.deny_public_ip is not in configuration)
+  - resource "azurerm_subscription_policy_assignment" "deny_public_ip" {
+      - description          = "Ensures that no network interfaces are created with public IP addresses." -> null
+      - display_name         = "Network interfaces should not have public IPs" -> null
+      - enforce              = true -> null
+      - id                   = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/providers/Microsoft.Authorization/policyAssignments/deny-public-ip" -> null
+      - location             = "centralus" -> null
+      - metadata             = jsonencode(
+            {
+              - assignedBy = "Terraform"
+              - createdBy  = "b50e2e02-561e-40d0-af1a-fb9f1deca7bf"
+              - createdOn  = "2025-10-17T11:04:06.699218Z"
+              - updatedBy  = null
+              - updatedOn  = null
+            }
+        ) -> null
+      - name                 = "deny-public-ip" -> null
+      - not_scopes           = [] -> null
+      - policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114" -> null
+      - subscription_id      = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413" -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.policy.azurerm_subscription_policy_assignment.require_tags will be destroyed
+  # (because azurerm_subscription_policy_assignment.require_tags is not in configuration)
+  - resource "azurerm_subscription_policy_assignment" "require_tags" {
+      - description          = "Requires that all resources have the 'Environment' tag with the value 'Production'." -> null
+      - display_name         = "Require 'Environment' tag on resources" -> null
+      - enforce              = true -> null
+      - id                   = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/providers/Microsoft.Authorization/policyAssignments/require-environment-tag" -> null
+      - location             = "centralus" -> null
+      - metadata             = jsonencode(
+            {
+              - assignedBy = "Terraform"
+              - createdBy  = "b50e2e02-561e-40d0-af1a-fb9f1deca7bf"
+              - createdOn  = "2025-10-17T11:04:06.1924486Z"
+              - updatedBy  = null
+              - updatedOn  = null
+            }
+        ) -> null
+      - name                 = "require-environment-tag" -> null
+      - not_scopes           = [] -> null
+      - parameters           = jsonencode(
+            {
+              - tagName  = {
+                  - value = "Environment"
+                }
+              - tagValue = {
+                  - value = "Production"
+                }
+            }
+        ) -> null
+      - policy_definition_id = "/providers/Microsoft.Authorization/policyDefinitions/1e30110a-5ceb-460c-a204-c1c3969c6d62" -> null
+      - subscription_id      = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413" -> null
+    }
+
+  # module.spoke_prod.azurerm_network_security_group.nsg_common must be replaced
+-/+ resource "azurerm_network_security_group" "nsg_common" {
+      ~ id                  = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-prod-spoke/providers/Microsoft.Network/networkSecurityGroups/nsg-lz-prod-prod-common" -> (known after apply)
+      ~ location            = "centralus" -> "eastus" # forces replacement
+      ~ name                = "nsg-lz-prod-prod-common" -> "nsg-lz-prod-common" # forces replacement
+      ~ resource_group_name = "rg-lz-prod-prod-spoke" -> "rg-lz-prod-spoke" # forces replacement
+      - tags                = {} -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.spoke_prod.azurerm_resource_group.spoke_rg must be replaced
+-/+ resource "azurerm_resource_group" "spoke_rg" {
+      ~ id         = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-prod-spoke" -> (known after apply)
+      ~ location   = "centralus" -> "eastus" # forces replacement
+      ~ name       = "rg-lz-prod-prod-spoke" -> "rg-lz-prod-spoke" # forces replacement
+      - tags       = {} -> null
+        # (1 unchanged attribute hidden)
+    }
+
+  # module.spoke_prod.azurerm_route_table.rt_spoke will be created
+  + resource "azurerm_route_table" "rt_spoke" {
+      + bgp_route_propagation_enabled = true
+      + id                            = (known after apply)
+      + location                      = "eastus"
+      + name                          = "rt-lz-prod-spoke"
+      + resource_group_name           = "rg-lz-prod-spoke"
+      + route                         = [
+          + {
+              + address_prefix         = "0.0.0.0/0"
+              + name                   = "default-to-fw"
+              + next_hop_in_ip_address = (known after apply)
+              + next_hop_type          = "VirtualAppliance"
+            },
+        ]
+      + subnets                       = (known after apply)
+    }
+
+  # module.spoke_prod.azurerm_subnet.app will be created
+  + resource "azurerm_subnet" "app" {
+      + address_prefixes                              = [
+          + "10.10.1.0/24",
+        ]
+      + default_outbound_access_enabled               = true
+      + id                                            = (known after apply)
+      + name                                          = "snet-app"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-lz-prod-spoke"
+      + virtual_network_name                          = "vnet-lz-prod-spoke"
+    }
+
+  # module.spoke_prod.azurerm_subnet.data will be created
+  + resource "azurerm_subnet" "data" {
+      + address_prefixes                              = [
+          + "10.10.2.0/24",
+        ]
+      + default_outbound_access_enabled               = true
+      + id                                            = (known after apply)
+      + name                                          = "snet-data"
+      + private_endpoint_network_policies             = "Disabled"
+      + private_link_service_network_policies_enabled = true
+      + resource_group_name                           = "rg-lz-prod-spoke"
+      + virtual_network_name                          = "vnet-lz-prod-spoke"
+    }
+
+  # module.spoke_prod.azurerm_subnet_network_security_group_association.app_assoc will be created
+  + resource "azurerm_subnet_network_security_group_association" "app_assoc" {
+      + id                        = (known after apply)
+      + network_security_group_id = (known after apply)
+      + subnet_id                 = (known after apply)
+    }
+
+  # module.spoke_prod.azurerm_subnet_network_security_group_association.data_assoc will be created
+  + resource "azurerm_subnet_network_security_group_association" "data_assoc" {
+      + id                        = (known after apply)
+      + network_security_group_id = (known after apply)
+      + subnet_id                 = (known after apply)
+    }
+
+  # module.spoke_prod.azurerm_subnet_route_table_association.rt_app will be created
+  + resource "azurerm_subnet_route_table_association" "rt_app" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.spoke_prod.azurerm_subnet_route_table_association.rt_data will be created
+  + resource "azurerm_subnet_route_table_association" "rt_data" {
+      + id             = (known after apply)
+      + route_table_id = (known after apply)
+      + subnet_id      = (known after apply)
+    }
+
+  # module.spoke_prod.azurerm_virtual_network.spoke_vnet must be replaced
+-/+ resource "azurerm_virtual_network" "spoke_vnet" {
+      ~ address_space                  = [
+          - "10.12.0.0/16",
+          + "10.10.0.0/16",
+        ]
+      ~ dns_servers                    = [] -> (known after apply)
+      - flow_timeout_in_minutes        = 0 -> null
+      ~ guid                           = "12554efa-e48e-4908-9190-b1a1c0204a1a" -> (known after apply)
+      ~ id                             = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-prod-spoke/providers/Microsoft.Network/virtualNetworks/vnet-lz-prod-prod-spoke" -> (known after apply)
+      ~ location                       = "centralus" -> "eastus" # forces replacement
+      ~ name                           = "vnet-lz-prod-prod-spoke" -> "vnet-lz-prod-spoke" # forces replacement
+      ~ resource_group_name            = "rg-lz-prod-prod-spoke" -> "rg-lz-prod-spoke" # forces replacement
+      ~ subnet                         = [] -> (known after apply)
+      - tags                           = {} -> null
+        # (3 unchanged attributes hidden)
+    }
+
+  # module.spoke_prod.azurerm_virtual_network_peering.hub_to_spoke must be replaced
+-/+ resource "azurerm_virtual_network_peering" "hub_to_spoke" {
+      ~ id                                     = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-hub/providers/Microsoft.Network/virtualNetworks/vnet-lz-prod-hub/virtualNetworkPeerings/peer-vnet-lz-prod-hub-to-vnet-lz-prod-prod-spoke" -> (known after apply)
+      - local_subnet_names                     = [] -> null
+      ~ name                                   = "peer-vnet-lz-prod-hub-to-vnet-lz-prod-prod-spoke" -> "peer-vnet-lz-hub-to-vnet-lz-prod-spoke" # forces replacement
+      - only_ipv6_peering_enabled              = false -> null
+      - remote_subnet_names                    = [] -> null
+      ~ remote_virtual_network_id              = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-prod-spoke/providers/Microsoft.Network/virtualNetworks/vnet-lz-prod-prod-spoke" -> (known after apply) # forces replacement
+      ~ resource_group_name                    = "rg-lz-prod-hub" -> "rg-lz-hub" # forces replacement
+      ~ virtual_network_name                   = "vnet-lz-prod-hub" -> "vnet-lz-hub" # forces replacement
+        # (5 unchanged attributes hidden)
+    }
+
+  # module.spoke_prod.azurerm_virtual_network_peering.spoke_to_hub must be replaced
+-/+ resource "azurerm_virtual_network_peering" "spoke_to_hub" {
+      ~ id                                     = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-prod-spoke/providers/Microsoft.Network/virtualNetworks/vnet-lz-prod-prod-spoke/virtualNetworkPeerings/peer-vnet-lz-prod-prod-spoke-to-hub" -> (known after apply)
+      - local_subnet_names                     = [] -> null
+      ~ name                                   = "peer-vnet-lz-prod-prod-spoke-to-hub" -> "peer-vnet-lz-prod-spoke-to-hub" # forces replacement
+      - only_ipv6_peering_enabled              = false -> null
+      - remote_subnet_names                    = [] -> null
+      ~ remote_virtual_network_id              = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-hub/providers/Microsoft.Network/virtualNetworks/vnet-lz-prod-hub" -> (known after apply) # forces replacement
+      ~ resource_group_name                    = "rg-lz-prod-prod-spoke" -> "rg-lz-prod-spoke" # forces replacement
+      ~ virtual_network_name                   = "vnet-lz-prod-prod-spoke" -> "vnet-lz-prod-spoke" # forces replacement
+        # (5 unchanged attributes hidden)
+    }
+
+Plan: 21 to add, 0 to change, 13 to destroy.
+
+Changes to Outputs:
+  ~ hub_rg                     = "rg-lz-prod-hub" -> "rg-lz-hub"
+  ~ hub_vnet                   = "vnet-lz-prod-hub" -> "vnet-lz-hub"
+  ~ log_analytics_workspace_id = "/subscriptions/1c95c3eb-55ac-4d47-bee1-e823c941e413/resourceGroups/rg-lz-prod-monitor/providers/Microsoft.OperationalInsights/workspaces/law-lz-prod" -> (known after apply)
+  ~ spoke_rg                   = "rg-lz-prod-prod-spoke" -> "rg-lz-prod-spoke"
+  ~ spoke_vnet                 = "vnet-lz-prod-prod-spoke" -> "vnet-lz-prod-spoke"
