@@ -170,10 +170,10 @@ Integration-ready with Microsoft Defender for Cloud, Azure Sentinel, and Securit
 📜 License
 This project is licensed under the MIT License
 .
+## 📞 Contact
 
-📞 Contact
-👤 Sudhir Dalvi
-📧 sudhir.dalvi@hotmail.com
-🔗 [https://github.com/sudhir81](https://www.linkedin.com/in/sudhir-dalvi-0591a95a/)
+👤 **Sudhir Dalvi**  
+📧 [sudhir.dalvi@hotmail.com](mailto:sudhir.dalvi@hotmail.com)  
+🔗 [LinkedIn](https://www.linkedin.com/in/sudhir-dalvi-0591a95a/)  
+🔗 [GitHub](https://github.com/sudhir81)
 
-⭐ If this project helps you, please consider starring the repo to support future work!
