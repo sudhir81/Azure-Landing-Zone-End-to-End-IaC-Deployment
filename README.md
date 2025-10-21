@@ -70,7 +70,7 @@ graph TD
 | **Platform**      | Shared services: networking, logging, identity, and monitoring |
 | **Landing Zones** | Environment-specific infrastructure (Dev, PreProd, Prod)       |
 | **Workloads**     | Applications, containers, data services, and ML workloads      |
-
+```
 ├── envs/
 │   ├── dev/             # Development environment deployment
 │   ├── preprod/         # Pre-production environment deployment
@@ -86,7 +86,7 @@ graph TD
 ├── backend.tf.example   # Remote backend state example
 └── README.md
 Key Features
-
+```
 ✅ End-to-End IaC — Complete Azure Landing Zone deployment using Terraform
 
 ✅ Multi-Environment — Isolated Dev, PreProd, and Prod with shared governance
