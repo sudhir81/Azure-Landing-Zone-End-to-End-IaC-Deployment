@@ -172,9 +172,8 @@ This project is licensed under the MIT License
 .
 
 📞 Contact
-👤 Author: Sudhir Dalvi
-📧 Email: sudhir.dalvi@hotmail.com
-
-🔗 GitHub: https://github.com/sudhir81
+👤 Sudhir Dalvi
+📧 sudhir.dalvi@hotmail.com
+🔗 [https://github.com/sudhir81](https://www.linkedin.com/in/sudhir-dalvi-0591a95a/)
 
 ⭐ If this project helps you, please consider starring the repo to support future work!
