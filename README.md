@@ -26,7 +26,7 @@ terraform init -backend-config=backend.hcl
 ## ▶️ How to deploy
 ```bash
 az login
-az account set --subscription "1c95c3eb-55ac-4d47-bee1-e823c941e413"
+az account set --subscription "....................."
 
 terraform init -backend-config=backend.hcl
 terraform validate
