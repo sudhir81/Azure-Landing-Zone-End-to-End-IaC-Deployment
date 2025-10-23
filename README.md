@@ -161,12 +161,13 @@ Integration-ready with Microsoft Defender for Cloud, Azure Sentinel, and Securit
  Integrate Checkov, TFLint, and security scanning into pipelines
 
 🧠 Best Practices Followed
+```
 
 ✅ Built according to Microsoft Cloud Adoption Framework (CAF) principles
 ✅ Supports GitOps workflows with Terraform + GitHub Actions
 ✅ Uses remote state backend with Azure Storage for state management
 ✅ Modular & scalable — ready for enterprise workloads
-
+```
 📜 License
 This project is licensed under the MIT License
 .
